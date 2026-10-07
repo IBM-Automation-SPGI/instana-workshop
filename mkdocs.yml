@@ -8,6 +8,37 @@ repo_url: "https://github.com/IBM-Automation-SPGI/instana-workshop"
 docs_dir: docs
 site_dir: site
 
+extra:
+  alternate:
+    - name: Español
+      link: /instana-workshop/
+      lang: es
+    - name: English
+      link: /instana-workshop/en/
+      lang: en
+
+plugins:
+  - search
+  - i18n:
+      languages:
+        - locale: es
+          name: Español
+          default: true
+          build: true
+        - locale: en
+          name: English
+          build: true
+          nav:
+            - "Introduction & Architecture": index.en.md
+            - "Lab 0 — Environment, Console & Dynamic Focus": lab0/index.en.md
+            - "Lab 1 — 3D Infrastructure, 1s Metrics & JVMs": lab1/index.en.md
+            - "Lab 2 — Application Perspectives & Service Flow": lab2/index.en.md
+            - "Lab 3 — 100% Tracing No-Sampling & Analytics": lab3/index.en.md
+            - "Lab 4 — Incidents, RCA & Change Events": lab4/index.en.md
+            - "Lab 5 — SmartAlerts, SLOs & Custom Dashboards": lab5/index.en.md
+            - "Lab 6 — Kubernetes & OpenShift Observability": lab6/index.en.md
+            - "Lab 7 — OpenTelemetry, SDK & Action Automation": lab7/index.en.md
+
 theme:
   name: material
   language: es
@@ -30,7 +61,6 @@ theme:
     text: IBM Plex Sans
     code: IBM Plex Mono
   features:
-    - navigation.instant
     - navigation.tracking
     - navigation.sections
     - navigation.expand
