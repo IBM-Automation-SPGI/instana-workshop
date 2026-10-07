@@ -1,0 +1,1013 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop interactivo y práctico para la monitorización de aplicaciones empresariales y análisis de causa raíz con IBM Instana">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+        <link rel="canonical" href="https://ibm-automation-spgi.github.io/instana-workshop/lab7/">
+      
+      
+        <link rel="prev" href="../lab6/">
+      
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+          <link rel="alternate" href="../en/lab7/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 7 — OpenTelemetry, SDK & Action Automation - Workshop de Observabilidad con IBM Instana</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../styles/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-7-opentelemetry-sdk-action-automation" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Workshop de Observabilidad con IBM Instana" class="md-header__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Workshop de Observabilidad con IBM Instana
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 7 — OpenTelemetry, SDK & Action Automation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../en/lab7/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Workshop de Observabilidad con IBM Instana" class="md-nav__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Workshop de Observabilidad con IBM Instana
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introducción y Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 — Entorno, Consola y Dynamic Focus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 — Infrastructure 3D, 1s Metrics & JVMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 — Application Perspectives & Service Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 — 100% Tracing No-Sampling & Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 — Incidentes, RCA & Change Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 — SmartAlerts, SLOs & Custom Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 — Kubernetes & OpenShift Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 7 — OpenTelemetry, SDK & Action Automation
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 7 — OpenTelemetry, SDK & Action Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-ecosistema-abierto-opentelemetry-y-sdk-de-instana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Ecosistema Abierto: OpenTelemetry y SDK de Instana
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-instrumentacion-personalizada-con-instana-sdk-java-nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Instrumentación Personalizada con Instana SDK (Java &amp; Node.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Instrumentación Personalizada con Instana SDK (Java &amp; Node.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-1-java-sdk-con-anotaciones-span" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo 1: Java SDK con Anotaciones (@Span)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-2-nodejs-custom-span" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo 2: Node.js Custom Span
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-el-action-framework-y-autorreparacion-self-healing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. El Action Framework y Autorreparación (Self-Healing)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. El Action Framework y Autorreparación (Self-Healing)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso-habituales-del-action-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos de Uso Habituales del Action Framework:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-auditoria-integral-y-diagnostico-avanzado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Auditoría Integral y Diagnóstico Avanzado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-resumen-y-checklist-del-lab-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Resumen y Checklist del Lab 7
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion-del-workshop-y-recursos-de-certificacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Conclusión del Workshop y Recursos de Certificación
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-ecosistema-abierto-opentelemetry-y-sdk-de-instana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Ecosistema Abierto: OpenTelemetry y SDK de Instana
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-instrumentacion-personalizada-con-instana-sdk-java-nodejs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Instrumentación Personalizada con Instana SDK (Java &amp; Node.js)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Instrumentación Personalizada con Instana SDK (Java &amp; Node.js)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-1-java-sdk-con-anotaciones-span" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo 1: Java SDK con Anotaciones (@Span)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejemplo-2-nodejs-custom-span" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejemplo 2: Node.js Custom Span
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-el-action-framework-y-autorreparacion-self-healing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. El Action Framework y Autorreparación (Self-Healing)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. El Action Framework y Autorreparación (Self-Healing)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#casos-de-uso-habituales-del-action-framework" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Casos de Uso Habituales del Action Framework:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-auditoria-integral-y-diagnostico-avanzado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Auditoría Integral y Diagnóstico Avanzado
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-resumen-y-checklist-del-lab-7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Resumen y Checklist del Lab 7
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion-del-workshop-y-recursos-de-certificacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🎓 Conclusión del Workshop y Recursos de Certificación
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lab-7-opentelemetry-sdk-action-automation"><strong>Lab 7 — OpenTelemetry, SDK &amp; Action Automation</strong><a class="headerlink" href="#lab-7-opentelemetry-sdk-action-automation" title="Permanent link">&para;</a></h1>
+<p><span class="lab-badge">LAB 7</span><span class="lab-time">⏱ 15 minutos</span></p>
+<hr />
+<h2 id="1-ecosistema-abierto-opentelemetry-y-sdk-de-instana"><strong>1. Ecosistema Abierto: OpenTelemetry y SDK de Instana</strong><a class="headerlink" href="#1-ecosistema-abierto-opentelemetry-y-sdk-de-instana" title="Permanent link">&para;</a></h2>
+<p>Aunque Instana destaca por su instrumentación automática sin código (<em>Zero-Code</em>), muchas organizaciones requieren estandarizar con <strong>OpenTelemetry (OTel)</strong> o enriquecer sus trazas con lógica de negocio personalizada.</p>
+<p>Instana ofrece soporte nativo de primera clase para el estándar abierto:</p>
+<ul>
+<li><strong>Ingesta Nativa OTLP:</strong> El agente de Instana actúa como un colector OTel nativo que acepta trazas y métricas vía <code>gRPC (puerto 4317)</code> y <code>HTTP (puerto 4318)</code>.</li>
+<li><strong>W3C TraceContext:</strong> Propagación transparente de cabeceras (<code>traceparent</code>, <code>tracestate</code>) para correlacionar servicios instrumentados con OTel y servicios instrumentados con agentes de Instana.</li>
+<li><strong>Instana SDK:</strong> Anotaciones <code>@Span</code> y librerías programáticas para Java, Node.js, Go, Python y .NET.</li>
+</ul>
+<hr />
+<h2 id="2-instrumentacion-personalizada-con-instana-sdk-java-nodejs"><strong>2. Instrumentación Personalizada con Instana SDK (Java &amp; Node.js)</strong><a class="headerlink" href="#2-instrumentacion-personalizada-con-instana-sdk-java-nodejs" title="Permanent link">&para;</a></h2>
+<h3 id="ejemplo-1-java-sdk-con-anotaciones-span">Ejemplo 1: Java SDK con Anotaciones (@Span)<a class="headerlink" href="#ejemplo-1-java-sdk-con-anotaciones-span" title="Permanent link">&para;</a></h3>
+<p>Para trazar un método de negocio crítico y registrar etiquetas personalizadas (como el ID del cliente o el importe de la orden):</p>
+<div class="language-java highlight"><pre><span></span><code><span id="__codelineno-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.instana.sdk.annotation.Span</span><span class="p">;</span>
+</span><span id="__codelineno-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">com.instana.sdk.support.SpanSupport</span><span class="p">;</span>
+</span><span id="__codelineno-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__codelineno-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">OrderProcessingService</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__codelineno-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="nd">@Span</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Span</span><span class="p">.</span><span class="na">Type</span><span class="p">.</span><span class="na">INTERMEDIATE</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"executeFraudCheck"</span><span class="p">)</span>
+</span><span id="__codelineno-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">checkFraudRisk</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">customerId</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">orderAmount</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="c1">// Enriquecer el span con tags de negocio</span>
+</span><span id="__codelineno-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="n">SpanSupport</span><span class="p">.</span><span class="na">annotate</span><span class="p">(</span><span class="s">"business.customer_id"</span><span class="p">,</span><span class="w"> </span><span class="n">customerId</span><span class="p">);</span>
+</span><span id="__codelineno-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="n">SpanSupport</span><span class="p">.</span><span class="na">annotate</span><span class="p">(</span><span class="s">"business.order_amount"</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="p">.</span><span class="na">valueOf</span><span class="p">(</span><span class="n">orderAmount</span><span class="p">));</span>
+</span><span id="__codelineno-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__codelineno-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">orderAmount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">5000.0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">            </span><span class="n">SpanSupport</span><span class="p">.</span><span class="na">annotate</span><span class="p">(</span><span class="s">"business.risk_level"</span><span class="p">,</span><span class="w"> </span><span class="s">"HIGH"</span><span class="p">);</span>
+</span><span id="__codelineno-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+</span><span id="__codelineno-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__codelineno-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+</span><span id="__codelineno-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__codelineno-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="ejemplo-2-nodejs-custom-span">Ejemplo 2: Node.js Custom Span<a class="headerlink" href="#ejemplo-2-nodejs-custom-span" title="Permanent link">&para;</a></h3>
+<div class="language-javascript highlight"><pre><span></span><code><span id="__codelineno-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">const</span><span class="w"> </span><span class="nx">instana</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">require</span><span class="p">(</span><span class="s1">'@instana/collector'</span><span class="p">);</span>
+</span><span id="__codelineno-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__codelineno-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">processPayment</span><span class="p">(</span><span class="nx">paymentPayload</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="nx">instana</span><span class="p">.</span><span class="nx">sdk</span><span class="p">.</span><span class="nx">callback</span><span class="p">.</span><span class="nx">startIntermediateSpan</span><span class="p">(</span><span class="s1">'custom-payment-engine'</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="nx">span</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="nx">span</span><span class="p">.</span><span class="nx">annotate</span><span class="p">(</span><span class="s1">'payment.method'</span><span class="p">,</span><span class="w"> </span><span class="nx">paymentPayload</span><span class="p">.</span><span class="nx">method</span><span class="p">);</span>
+</span><span id="__codelineno-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="nx">span</span><span class="p">.</span><span class="nx">annotate</span><span class="p">(</span><span class="s1">'payment.currency'</span><span class="p">,</span><span class="w"> </span><span class="s1">'EUR'</span><span class="p">);</span>
+</span><span id="__codelineno-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+</span><span id="__codelineno-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="c1">// Ejecución de la lógica</span>
+</span><span id="__codelineno-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">performTransaction</span><span class="p">(</span><span class="nx">paymentPayload</span><span class="p">);</span>
+</span><span id="__codelineno-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nx">span</span><span class="p">.</span><span class="nx">end</span><span class="p">();</span>
+</span><span id="__codelineno-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">result</span><span class="p">;</span>
+</span><span id="__codelineno-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">  </span><span class="p">});</span>
+</span><span id="__codelineno-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="3-el-action-framework-y-autorreparacion-self-healing"><strong>3. El Action Framework y Autorreparación (Self-Healing)</strong><a class="headerlink" href="#3-el-action-framework-y-autorreparacion-self-healing" title="Permanent link">&para;</a></h2>
+<p>El <strong>Action Framework</strong> de Instana permite cerrar el ciclo de la observabilidad pasando de la <em>Detección</em> a la <strong>Remediación Automatizada</strong>:</p>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab7_automation_actions.png" alt="Instana Automation Action Framework" />
+  <div class="screenshot-caption">Figura 7.1: Catálogo de acciones y runbooks de remediación automatizada en Instana.</div>
+</div>
+
+<pre class="mermaid"><code>flowchart LR
+    INC["1. Detección de Incidente por Instana RCA"] --&gt; COND["2. Evaluación de Políticas de Automatización"]
+    COND --&gt; ACT["3. Ejecución de Acción / Runbook"]
+    ACT --&gt; RES["4. Resolución y Cierre Automático del Incidente"]
+
+    subgraph ACCIONES["Tipos de Acciones Disponibles"]
+        A1["Reiniciar Pod / Proceso"]
+        A2["Limpiar Caché Redis / Pool"]
+        A3["Ejecutar Ansible Playbook"]
+        A4["Escalar Réplicas Kubernetes"]
+    end
+
+    ACT -.-&gt; ACCIONES
+
+    style INC fill:#fee2e2,stroke:#ef4444
+    style COND fill:#fef3c7,stroke:#d97706
+    style ACT fill:#e0f2fe,stroke:#0284c7
+    style RES fill:#f0fdf4,stroke:#16a34a</code></pre>
+<h3 id="casos-de-uso-habituales-del-action-framework">Casos de Uso Habituales del Action Framework:<a class="headerlink" href="#casos-de-uso-habituales-del-action-framework" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Ejecución de Ansible Playbooks:</strong> Desencadenar un playbook de Red Hat Ansible Automation Platform cuando se detecta saturación de disco o fallo de servicio.</li>
+<li><strong>Reinicio de Pods en CrashLoop:</strong> Ejecutar scripts de saneamiento o recolección de <em>heap dumps</em> antes de que el pod sea reciclado.</li>
+<li><strong>Escalado Predictivo:</strong> Ajustar el número de réplicas en previsión de un evento de alta concurrencia.</li>
+</ol>
+<hr />
+<h2 id="4-auditoria-integral-y-diagnostico-avanzado"><strong>4. Auditoría Integral y Diagnóstico Avanzado</strong><a class="headerlink" href="#4-auditoria-integral-y-diagnostico-avanzado" title="Permanent link">&para;</a></h2>
+<p>Al combinar <strong>Auto-Discovery, Tracing al 100%, Dynamic Graph, Kubernetes Observability, OpenTelemetry y Action Automation</strong>, IBM Instana proporciona una plataforma unificada para desarrolladores, SREs y líderes de TI:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Observabilidad Completa = Telemetría 1s + 100% Tracing + Topología Viva + RCA con IA + Acción Automatizada
+</span></code></pre></div>
+<hr />
+<h2 id="5-resumen-y-checklist-del-lab-7"><strong>5. Resumen y Checklist del Lab 7</strong><a class="headerlink" href="#5-resumen-y-checklist-del-lab-7" title="Permanent link">&para;</a></h2>
+<p>Al finalizar este laboratorio final, has adquirido las competencias para:</p>
+<ul>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Integrar telemetría de <em>OpenTelemetry (OTLP)</em> con agentes de Instana.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Utilizar el <em>Instana SDK</em> para inyectar spans personalizados y etiquetas de negocio.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Comprender el funcionamiento del <em>Action Framework</em> para automatizar runbooks y remediación.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Diseñar una estrategia de observabilidad y SRE moderna de extremo a extremo.</li>
+</ul>
+<hr />
+<h2 id="conclusion-del-workshop-y-recursos-de-certificacion"><strong>🎓 Conclusión del Workshop y Recursos de Certificación</strong><a class="headerlink" href="#conclusion-del-workshop-y-recursos-de-certificacion" title="Permanent link">&para;</a></h2>
+<p>¡Enhorabuena por completar los 8 laboratorios del <strong>Workshop de Observabilidad con IBM Instana</strong>!</p>
+<ul>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 3.75A.75.75 0 0 1 .75 3h7.497c1.566 0 2.945.8 3.751 2.014A4.5 4.5 0 0 1 15.75 3h7.5a.75.75 0 0 1 .75.75v15.063a.75.75 0 0 1-.755.75l-7.682-.052a3 3 0 0 0-2.142.878l-.89.891a.75.75 0 0 1-1.061 0l-.902-.901a3 3 0 0 0-2.121-.879H.75a.75.75 0 0 1-.75-.75Zm12.75 15.232a4.5 4.5 0 0 1 2.823-.971l6.927.047V4.5h-6.75a3 3 0 0 0-3 3ZM11.247 7.497a3 3 0 0 0-3-2.997H1.5V18h6.947c1.018 0 2.006.346 2.803.98Z"/></svg></span> <a href="https://www.ibm.com/docs/en/instana-observability">Documentación Oficial de IBM Instana</a></li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.292 2.06zl11.25 4.75a.749.749 0 0 1 0 1.382L19 10.108V15a.75.75 0 0 1-.11.391h-.001a3 3 0 0 1-.392.482c-.249.256-.625.58-1.163.896-1.08.638-2.776 1.23-5.334 1.23-.673 0-1.286-.041-1.846-.113a.75.75 0 0 1 .192-1.487c.492.063 1.042.1 1.654.1 2.317 0 3.746-.533 4.572-1.021.31-.178.596-.397.849-.65l.079-.085V10.74l-5.208 2.2a.75.75 0 0 1-.584 0L5.75 10.424v3.17c.502.129.96.391 1.327.758.579.578.923 1.41.923 2.428v4.5a.76.76 0 0 1-.345.634 2 2 0 0 1-.21.117 4 4 0 0 1-.52.213A6.1 6.1 0 0 1 5 22.532a6.1 6.1 0 0 1-1.925-.288 4 4 0 0 1-.52-.213 2 2 0 0 1-.22-.124.76.76 0 0 1-.335-.624v-4.5c0-1.02.344-1.85.923-2.43a2.9 2.9 0 0 1 1.327-.757V9.793L.458 8.19a.75.75 0 0 1 0-1.38l11.25-4.75a.75.75 0 0 1 .584 0M12 11.436 21.322 7.5 12 3.564 2.678 7.5ZM5 15c-.377 0-.745.141-1.017.413-.265.265-.483.7-.483 1.368v4.022c.299.105.797.228 1.5.228s1.201-.123 1.5-.228V16.78c0-.669-.218-1.103-.483-1.368A1.43 1.43 0 0 0 5 15"/></svg></span> <a href="https://www.ibm.com/training/certification">IBM Professional Certification Program</a></li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.2 10.2 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11"/></svg></span> <a href="https://github.com/IBM-Automation-SPGI/instana-workshop">Repositorio del Workshop en GitHub</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

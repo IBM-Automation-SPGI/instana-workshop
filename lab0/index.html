@@ -1,0 +1,1196 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop interactivo y práctico para la monitorización de aplicaciones empresariales y análisis de causa raíz con IBM Instana">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+        <link rel="canonical" href="https://ibm-automation-spgi.github.io/instana-workshop/lab0/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../lab1/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+          <link rel="alternate" href="../en/lab0/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 0 — Entorno, Consola y Dynamic Focus - Workshop de Observabilidad con IBM Instana</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../styles/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-0-entorno-consola-y-dynamic-focus" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Workshop de Observabilidad con IBM Instana" class="md-header__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Workshop de Observabilidad con IBM Instana
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 0 — Entorno, Consola y Dynamic Focus
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../en/lab0/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Workshop de Observabilidad con IBM Instana" class="md-nav__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Workshop de Observabilidad con IBM Instana
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introducción y Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 — Entorno, Consola y Dynamic Focus
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 — Entorno, Consola y Dynamic Focus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fundamentos-teoricos-de-la-observabilidad-moderna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fundamentos Teóricos de la Observabilidad Moderna
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-acceso-a-la-consola-de-instana-dev-sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Acceso a la Consola de Instana Dev Sandbox
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-modulos-y-arquitectura-de-la-barra-lateral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Módulos y Arquitectura de la Barra Lateral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-el-selector-de-ventana-temporal-time-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. El Selector de Ventana Temporal (Time Picker)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. El Selector de Ventana Temporal (Time Picker)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modos-de-operacion-temporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modos de Operación Temporal:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-dominando-la-dynamic-focus-bar-consultas-lucene" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Dominando la Dynamic Focus Bar (Consultas Lucene)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Dominando la Dynamic Focus Bar (Consultas Lucene)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tabla-de-sintaxis-y-operadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tabla de Sintaxis y Operadores:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicios-practicos-con-dynamic-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios Prácticos con Dynamic Focus:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-api-de-automatizacion-graphql-y-rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. API de Automatización: GraphQL y REST API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. API de Automatización: GraphQL y REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#consulta-de-topologia-con-graphql-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consulta de Topología con GraphQL API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-resumen-y-checklist-del-lab-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Resumen y Checklist del Lab 0
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 — Infrastructure 3D, 1s Metrics & JVMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 — Application Perspectives & Service Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 — 100% Tracing No-Sampling & Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 — Incidentes, RCA & Change Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 — SmartAlerts, SLOs & Custom Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 — Kubernetes & OpenShift Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 7 — OpenTelemetry, SDK & Action Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fundamentos-teoricos-de-la-observabilidad-moderna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fundamentos Teóricos de la Observabilidad Moderna
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-acceso-a-la-consola-de-instana-dev-sandbox" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Acceso a la Consola de Instana Dev Sandbox
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-modulos-y-arquitectura-de-la-barra-lateral" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Módulos y Arquitectura de la Barra Lateral
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-el-selector-de-ventana-temporal-time-picker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. El Selector de Ventana Temporal (Time Picker)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. El Selector de Ventana Temporal (Time Picker)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modos-de-operacion-temporal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Modos de Operación Temporal:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-dominando-la-dynamic-focus-bar-consultas-lucene" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Dominando la Dynamic Focus Bar (Consultas Lucene)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Dominando la Dynamic Focus Bar (Consultas Lucene)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tabla-de-sintaxis-y-operadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tabla de Sintaxis y Operadores:
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ejercicios-practicos-con-dynamic-focus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios Prácticos con Dynamic Focus:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-api-de-automatizacion-graphql-y-rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. API de Automatización: GraphQL y REST API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. API de Automatización: GraphQL y REST API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#consulta-de-topologia-con-graphql-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consulta de Topología con GraphQL API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-resumen-y-checklist-del-lab-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Resumen y Checklist del Lab 0
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lab-0-entorno-consola-y-dynamic-focus"><strong>Lab 0 — Entorno, Consola y Dynamic Focus</strong><a class="headerlink" href="#lab-0-entorno-consola-y-dynamic-focus" title="Permanent link">&para;</a></h1>
+<p><span class="lab-badge">LAB 0</span><span class="lab-time">⏱ 15 minutos</span></p>
+<hr />
+<h2 id="1-fundamentos-teoricos-de-la-observabilidad-moderna"><strong>1. Fundamentos Teóricos de la Observabilidad Moderna</strong><a class="headerlink" href="#1-fundamentos-teoricos-de-la-observabilidad-moderna" title="Permanent link">&para;</a></h2>
+<p>La transición desde aplicaciones monolíticas hacia arquitecturas de microservicios distribuidos, contenedores efímeros y nubes híbridas ha transformado radicalmente la monitorización. En un entorno dinámico, los tres pilares clásicos de la observabilidad (Métricas, Logs y Trazas) resultan insuficientes si se analizan en silos desconectados.</p>
+<p><strong>IBM Instana</strong> introduce un paradigma centrado en la <strong>Observabilidad Continua y Automatizada</strong>, articulado en cuatro capacidades esenciales:</p>
+<ol>
+<li><strong>Auto-Discovery Continuo:</strong> Descubrimiento pasivo y activo de componentes físicos, lógicos y de red sin intervención humana.</li>
+<li><strong>Dynamic Graph:</strong> Un grafo temporal en memoria que mantiene actualizadas las dependencias vivas entre infraestructura y código.</li>
+<li><strong>Métricas de Alta Fidelidad (Resolución de 1 segundo):</strong> Captura instantánea de micro-ráfagas (<em>micro-bursts</em>) de CPU o memoria que los sistemas basados en promedios de 1 a 5 minutos ocultan.</li>
+<li><strong>100% Tracing No-Sampling:</strong> Cada transacción individual es registrada y contextualizada para auditoría y diagnóstico sin pérdida de información.</li>
+</ol>
+<p>En este laboratorio inicial te familiarizarás con el entorno de trabajo (<strong>IBM Dev Sandbox</strong>), aprenderás a orientarte dentro de la interfaz gráfica, dominarás el control temporal y utilizarás el motor de búsqueda universal <strong>Dynamic Focus</strong>.</p>
+<hr />
+<h2 id="2-acceso-a-la-consola-de-instana-dev-sandbox"><strong>2. Acceso a la Consola de Instana Dev Sandbox</strong><a class="headerlink" href="#2-acceso-a-la-consola-de-instana-dev-sandbox" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Abre tu navegador web e ingresa en:
+   <a href="https://ibmdevsandbox-instanaibm.instana.io/#/home"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M15.5 2.25a.75.75 0 0 1 .75-.75h5.5a.75.75 0 0 1 .75.75v5.5a.75.75 0 0 1-1.5 0V4.06l-6.22 6.22a.75.75 0 1 1-1.06-1.06L19.94 3h-3.69a.75.75 0 0 1-.75-.75"/><path d="M2.5 4.25c0-.966.784-1.75 1.75-1.75h8.5a.75.75 0 0 1 0 1.5h-8.5a.25.25 0 0 0-.25.25v15.5c0 .138.112.25.25.25h15.5a.25.25 0 0 0 .25-.25v-8.5a.75.75 0 0 1 1.5 0v8.5a1.75 1.75 0 0 1-1.75 1.75H4.25a1.75 1.75 0 0 1-1.75-1.75z"/></svg></span> https://ibmdevsandbox-instanaibm.instana.io/#/home</a></li>
+<li>Inicia sesión a través del portal de identidad corporativo (SSO).</li>
+<li>Tras la autenticación, accederás al panel de bienvenida (<strong>Home Overview</strong>):</li>
+</ol>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab0_home.png" alt="Pantalla Principal de Instana Sandbox" />
+  <div class="screenshot-caption">Figura 0.1: Pantalla inicial (Home Overview) en IBM Instana Sandbox mostrando incidentes activos y accesos directos.</div>
+</div>
+
+<p>En esta pantalla inicial observarás:</p>
+<ul>
+<li><strong>Banner de Novedades y Comunidad:</strong> Enlaces a las APIs de GraphQL, documentación oficial y release notes.</li>
+<li><strong>Incidentes Activos (Incidents Summary):</strong> Resumen en tiempo real de anomalías correlacionadas en los clústeres del entorno (por ejemplo, alertas sobre llamadas a catálogos o estados de bases de datos).</li>
+<li><strong>Acceso a Instalación de Agentes:</strong> El botón <code>Install agents or collectors</code> proporciona los comandos listos para desplegar agentes en Linux, Windows, macOS, Kubernetes, OpenShift o nubes públicas (AWS, Azure, GCP, IBM Cloud).</li>
+</ul>
+<hr />
+<h2 id="3-modulos-y-arquitectura-de-la-barra-lateral"><strong>3. Módulos y Arquitectura de la Barra Lateral</strong><a class="headerlink" href="#3-modulos-y-arquitectura-de-la-barra-lateral" title="Permanent link">&para;</a></h2>
+<p>La consola de Instana organiza sus capacidades en una barra lateral izquierda de alto contraste:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Icono / Módulo</th>
+<th style="text-align: left;">Propósito y Capacidades Principales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>🏠 Home</strong></td>
+<td style="text-align: left;">Resumen ejecutivo, incidentes abiertos en tiempo real y accesos rápidos a documentación y APIs GraphQL.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🌐 Websites &amp; mobile apps</strong></td>
+<td style="text-align: left;"><strong>Real User Monitoring (RUM)</strong>. Monitoriza la experiencia de usuario final en navegadores web y apps móviles (iOS/Android), midiendo <em>Core Web Vitals</em> (LCP, FID, CLS), tiempos de renderizado y errores JavaScript.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>💼 Business processes</strong></td>
+<td style="text-align: left;">Monitorización orientada a procesos de negocio (ej. <em>Checkout to Delivery</em>, <em>Loan Application Approval</em>) correlacionando múltiples servicios técnicos con KPIs de negocio.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>📱 Applications</strong></td>
+<td style="text-align: left;"><strong>Application Perspectives</strong>. Agrupación lógica de servicios, APIs y microservicios con sus métricas RED (Rate, Errors, Duration) y mapas de dependencias.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🤖 Gen AI observability</strong></td>
+<td style="text-align: left;">Telemetría especializada para inferencias de <strong>Large Language Models (LLMs)</strong>, agentes watsonx, consumo de tokens, latencias de embedding y costos operativos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>☁️ Platforms</strong></td>
+<td style="text-align: left;">Monitorización nativa de plataformas de orquestación como <strong>Kubernetes, Red Hat OpenShift, Cloud Foundry, VMware vSphere y Serverless (AWS Lambda)</strong>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🗄️ Infrastructure</strong></td>
+<td style="text-align: left;"><strong>Infrastructure Map 3D</strong>. Mapa físico y virtual de hosts, máquinas virtuales, procesos middleware (JVMs, Node.js, Go, Python) y bases de datos.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>📊 Custom dashboards</strong></td>
+<td style="text-align: left;">Creación y consumo de cuadros de mando personalizados con widgets interactivos multidimensionales.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>📋 Logs</strong></td>
+<td style="text-align: left;">Búsqueda y correlación contextual de registros de logs enlazados directamente con las trazas y los contenedores que los emitieron (<em>Logs in Context</em>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>⏱️ Synthetic monitoring</strong></td>
+<td style="text-align: left;">Ejecución periódica de pruebas sintéticas (HTTP checks, scripts de navegación de usuario) desde múltiples puntos de presencia globales para validar SLAs.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🔍 Analytics</strong></td>
+<td style="text-align: left;"><strong>Unbounded Analytics</strong>. Motor analítico que permite consultar, filtrar y agrupar miles de millones de trazas, llamadas y métricas de infraestructura sin límites de cardinalidad.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>🛡️ Vulnerabilities</strong></td>
+<td style="text-align: left;">Análisis estático y dinámico de vulnerabilidades CVE en librerías cargadas en memoria por los runtimes monitorizados.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>⚠️ Events</strong></td>
+<td style="text-align: left;">Registro consolidado de anomalías, advertencias, eventos de cambio (despliegues de Git, reinicios) e <strong>Incidentes agrupados por IA</strong>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-el-selector-de-ventana-temporal-time-picker"><strong>4. El Selector de Ventana Temporal (Time Picker)</strong><a class="headerlink" href="#4-el-selector-de-ventana-temporal-time-picker" title="Permanent link">&para;</a></h2>
+<p>En la esquina superior derecha se encuentra el control de tiempo, una herramienta clave para el análisis forense:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>┌─────────────────────────────────┐  ┌──────────┐
+</span><span id="__codelineno-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>│  Oct 07 - Last hour          ▼  │  │  Live ▶  │
+</span><span id="__codelineno-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>└─────────────────────────────────┘  └──────────┘
+</span></code></pre></div>
+<h3 id="modos-de-operacion-temporal">Modos de Operación Temporal:<a class="headerlink" href="#modos-de-operacion-temporal" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Live Mode (Tiempo Real):</strong></li>
+<li>Cuando el botón <code>Live ▶</code> está activo, la interfaz actualiza los gráficos automáticamente cada 1-5 segundos.</li>
+<li>Es ideal para salas de operaciones (NOC/SRE) y monitorización durante despliegues en producción o pruebas de estrés.</li>
+<li><strong>Preset Ranges (Ventanas predefinidas):</strong></li>
+<li><code>Last 10 minutes</code>, <code>Last hour</code>, <code>Last 24 hours</code>, <code>Last 7 days</code>, <code>Last 30 days</code>.</li>
+<li><strong>Time Shift &amp; Compare:</strong></li>
+<li>Permite superponer la curva de rendimiento actual con la de la misma hora del día anterior o de la semana pasada para identificar desvíos de estacionalidad.</li>
+<li><strong>Custom Window (Ventana absoluta):</strong></li>
+<li>Permite fijar un intervalo específico (ej. <code>2026-10-07 13:15:00</code> a <code>2026-10-07 13:30:00</code>) para analizar un incidente pasado sin que el paso del tiempo altere los datos en pantalla.</li>
+</ol>
+<hr />
+<h2 id="5-dominando-la-dynamic-focus-bar-consultas-lucene"><strong>5. Dominando la Dynamic Focus Bar (Consultas Lucene)</strong><a class="headerlink" href="#5-dominando-la-dynamic-focus-bar-consultas-lucene" title="Permanent link">&para;</a></h2>
+<p>La <strong>Dynamic Focus Bar</strong> situada en la cabecera superior permite transformar toda la interfaz de Instana aplicando filtros transversales que afectan instantáneamente a la infraestructura, los servicios, las trazas y las alertas.</p>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab0_dynamic_focus.png" alt="Dynamic Focus Bar en Instana" />
+  <div class="screenshot-caption">Figura 0.2: Barra de búsqueda universal Dynamic Focus con autocompletado contextual de entidades y tags.</div>
+</div>
+
+<h3 id="tabla-de-sintaxis-y-operadores">Tabla de Sintaxis y Operadores:<a class="headerlink" href="#tabla-de-sintaxis-y-operadores" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Operador / Sintaxis</th>
+<th style="text-align: left;">Ejemplo de Uso</th>
+<th style="text-align: left;">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Exact match</strong></td>
+<td style="text-align: left;"><code>entity.type:jvm</code></td>
+<td style="text-align: left;">Filtra solo procesos de Java Virtual Machine.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Wildcard (<code>*</code>)</strong></td>
+<td style="text-align: left;"><code>container.name:*catalogue*</code></td>
+<td style="text-align: left;">Coincidencia parcial con cualquier contenedor que contenga "catalogue".</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operador AND</strong></td>
+<td style="text-align: left;"><code>entity.zone:production AND entity.type:host</code></td>
+<td style="text-align: left;">Coincidencia simultánea de zona y tipo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operador OR</strong></td>
+<td style="text-align: left;"><code>call.http.status:500 OR call.http.status:502</code></td>
+<td style="text-align: left;">Coincidencia de cualquiera de los valores.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Operador NOT</strong></td>
+<td style="text-align: left;"><code>entity.type:host AND NOT entity.zone:test</code></td>
+<td style="text-align: left;">Excluye entidades que cumplan la condición.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Comparación numérica</strong></td>
+<td style="text-align: left;"><code>call.duration:&gt;200ms</code></td>
+<td style="text-align: left;">Filtra llamadas con tiempo de respuesta superior a 200 ms.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Rango numérico</strong></td>
+<td style="text-align: left;"><code>call.http.status:[500 TO 599]</code></td>
+<td style="text-align: left;">Rango inclusivo de códigos de error 5xx.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ejercicios-practicos-con-dynamic-focus">Ejercicios Prácticos con Dynamic Focus:<a class="headerlink" href="#ejercicios-practicos-con-dynamic-focus" title="Permanent link">&para;</a></h3>
+<div class="admonition example">
+<p class="admonition-title">Ejercicio 1: Filtrar por tecnología de base de datos</p>
+<p>En la Dynamic Focus Bar, escribe la siguiente consulta y presiona Enter:
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>entity.type:mongodb
+</span></code></pre></div>
+<em>Observa cómo la interfaz resalta exclusivamente las instancias de MongoDB activas en el entorno.</em></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Ejercicio 2: Filtrar contenedores de la aplicación de pedidos</p>
+<p>Limpia el filtro anterior y escribe:
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>container.name:*catalogue* OR container.name:*cart*
+</span></code></pre></div>
+<em>Esto aislará los contenedores de catálogo y carrito de compras en toda la topología.</em></p>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Ejercicio 3: Aislar llamadas con error HTTP de servidor</p>
+<p>Escribe:
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>call.http.status:&gt;=500
+</span></code></pre></div>
+<em>Toda la telemetría se enfocará únicamente en las transacciones que han producido errores críticos 5xx.</em></p>
+</div>
+<hr />
+<h2 id="6-api-de-automatizacion-graphql-y-rest-api"><strong>6. API de Automatización: GraphQL y REST API</strong><a class="headerlink" href="#6-api-de-automatizacion-graphql-y-rest-api" title="Permanent link">&para;</a></h2>
+<p>Instana está diseñado con una arquitectura <strong>API-First</strong>. Cualquier dato visible en la interfaz gráfica puede consultarse y automatizarse mediante sus APIs públicas:</p>
+<h3 id="consulta-de-topologia-con-graphql-api">Consulta de Topología con GraphQL API<a class="headerlink" href="#consulta-de-topologia-con-graphql-api" title="Permanent link">&para;</a></h3>
+<p>Instana expone un endpoint GraphQL en <code>https://&lt;instana-unit&gt;/graphql</code> que permite consultar el Dynamic Graph:</p>
+<div class="language-graphql highlight"><pre><span></span><code><span id="__codelineno-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">query</span><span class="w"> </span><span class="nf">GetUnhealthyServices</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="n">application</span><span class="p">(</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s">"keda-scaler-robotapp"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">name</span>
+</span><span id="__codelineno-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">services</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">      </span><span class="n">name</span>
+</span><span id="__codelineno-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="n">health</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="n">status</span>
+</span><span id="__codelineno-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="n">unresolvedIssuesCount</span>
+</span><span id="__codelineno-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__codelineno-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="n">metrics</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__codelineno-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="n">calls</span><span class="p">(</span><span class="n">window</span><span class="p">:</span><span class="w"> </span><span class="s">"last-hour"</span><span class="p">)</span>
+</span><span id="__codelineno-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="n">erroneousCallRate</span><span class="p">(</span><span class="n">window</span><span class="p">:</span><span class="w"> </span><span class="s">"last-hour"</span><span class="p">)</span>
+</span><span id="__codelineno-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="n">latency</span><span class="p">(</span><span class="n">window</span><span class="p">:</span><span class="w"> </span><span class="s">"last-hour"</span><span class="p">,</span><span class="w"> </span><span class="n">aggregation</span><span class="p">:</span><span class="w"> </span><span class="no">P95</span><span class="p">)</span>
+</span><span id="__codelineno-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__codelineno-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__codelineno-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__codelineno-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<hr />
+<h2 id="7-resumen-y-checklist-del-lab-0"><strong>7. Resumen y Checklist del Lab 0</strong><a class="headerlink" href="#7-resumen-y-checklist-del-lab-0" title="Permanent link">&para;</a></h2>
+<p>Al finalizar este laboratorio, has adquirido las competencias para:</p>
+<ul>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Iniciar sesión y autenticarte en el Sandbox de IBM Instana.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Comprender el propósito de cada módulo en la barra de navegación lateral.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Dominar el <em>Time Picker</em>, alternando entre el modo <em>Live</em> y ventanas históricas de análisis.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Construir consultas complejas con la sintaxis de <em>Dynamic Focus</em> para filtrar el contexto de observabilidad.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Conocer las capacidades de automatización vía API REST y GraphQL.</li>
+</ul>
+<hr />
+<p><a class="md-button md-button--primary" href="../lab1/">Continuar al Lab 1: Infrastructure 3D, 1s Metrics &amp; JVMs <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

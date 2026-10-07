@@ -1,0 +1,1101 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop interactivo y práctico para la monitorización de aplicaciones empresariales y análisis de causa raíz con IBM Instana">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+        <link rel="canonical" href="https://ibm-automation-spgi.github.io/instana-workshop/en/lab1/">
+      
+      
+        <link rel="prev" href="../lab0/">
+      
+      
+        <link rel="next" href="../lab2/">
+      
+      
+        
+          <link rel="alternate" href="../../lab1/" hreflang="es">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 1 — 3D Infrastructure, 1s Metrics & JVMs - Workshop de Observabilidad con IBM Instana</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../styles/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-1-infrastructure-3d-1s-metrics-jvms" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../" title="Workshop de Observabilidad con IBM Instana" class="md-header__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Workshop de Observabilidad con IBM Instana
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 1 — 3D Infrastructure, 1s Metrics & JVMs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../lab1/" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="Workshop de Observabilidad con IBM Instana" class="md-nav__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Workshop de Observabilidad con IBM Instana
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 — Environment, Console & Dynamic Focus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 — 3D Infrastructure, 1s Metrics & JVMs
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 — 3D Infrastructure, 1s Metrics & JVMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-agent-architecture-and-the-dynamic-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Agent Architecture and the Dynamic Graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-navigating-the-3d-infrastructure-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Navigating the 3D Infrastructure Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-anatomy-of-a-pillar-in-the-3d-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Anatomy of a Pillar in the 3D Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dynamic-perspectives-and-groupings-hosts-vs-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dynamic Perspectives and Groupings (Hosts vs Containers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Dynamic Perspectives and Groupings (Hosts vs Containers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reorganization-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reorganization Exercise:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-in-depth-host-inspection-and-1-second-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. In-Depth Host Inspection and 1-Second Metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-context-guide-and-stack-viewer-from-hardware-to-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Context Guide and Stack Viewer (From Hardware to Code)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-runtime-and-jvm-forensic-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Runtime and JVM Forensic Diagnostics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Runtime and JVM Forensic Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#production-diagnostic-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production Diagnostic Scenarios:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-advanced-agent-configuration-configurationyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Advanced Agent Configuration (configuration.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-lab-1-summary-and-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Lab 1 Summary and Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 — Application Perspectives & Service Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 — 100% Tracing No-Sampling & Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 — Incidents, RCA & Change Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 — SmartAlerts, SLOs & Custom Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 — Kubernetes & OpenShift Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 7 — OpenTelemetry, SDK & Action Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-agent-architecture-and-the-dynamic-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Agent Architecture and the Dynamic Graph
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-navigating-the-3d-infrastructure-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Navigating the 3D Infrastructure Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-anatomy-of-a-pillar-in-the-3d-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Anatomy of a Pillar in the 3D Map
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-dynamic-perspectives-and-groupings-hosts-vs-containers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Dynamic Perspectives and Groupings (Hosts vs Containers)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Dynamic Perspectives and Groupings (Hosts vs Containers)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reorganization-exercise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Reorganization Exercise:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-in-depth-host-inspection-and-1-second-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. In-Depth Host Inspection and 1-Second Metrics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-context-guide-and-stack-viewer-from-hardware-to-code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Context Guide and Stack Viewer (From Hardware to Code)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-runtime-and-jvm-forensic-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Runtime and JVM Forensic Diagnostics
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Runtime and JVM Forensic Diagnostics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#production-diagnostic-scenarios" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Production Diagnostic Scenarios:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-advanced-agent-configuration-configurationyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Advanced Agent Configuration (configuration.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-lab-1-summary-and-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Lab 1 Summary and Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lab-1-infrastructure-3d-1s-metrics-jvms"><strong>Lab 1 — Infrastructure 3D, 1s Metrics &amp; JVMs</strong><a class="headerlink" href="#lab-1-infrastructure-3d-1s-metrics-jvms" title="Permanent link">&para;</a></h1>
+<p><span class="lab-badge">LAB 1</span><span class="lab-time">⏱ 20 minutes</span></p>
+<hr />
+<h2 id="1-agent-architecture-and-the-dynamic-graph"><strong>1. Agent Architecture and the Dynamic Graph</strong><a class="headerlink" href="#1-agent-architecture-and-the-dynamic-graph" title="Permanent link">&para;</a></h2>
+<p>The Instana <strong>Host Agent</strong> operates through a modular sensor architecture that activates dynamically:</p>
+<ul>
+<li><strong>Infrastructure Sensor:</strong> Collects hardware metrics at <strong>1-second resolution</strong> without overloading host CPU.</li>
+<li><strong>Runtime Sensors (Java, Node.js, Go, Python, .NET, PHP):</strong> Hot-injected into active processes to instrument code and trace distributed transactions.</li>
+<li><strong>Middleware Sensors (Kafka, RabbitMQ, PostgreSQL, Db2, MySQL, Redis, MongoDB):</strong> Queries internal performance metrics, connection pools, and queue lengths.</li>
+</ul>
+<p>All this data continuously feeds the <strong>Dynamic Graph</strong>: an in-memory temporal topology model updating system dependencies:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Datacenter / Cloud Region  ➔  Host / VM  ➔  Container  ➔  Process (JVM/Node)  ➔  Service  ➔  Endpoint
+</span></code></pre></div>
+<hr />
+<h2 id="2-navigating-the-3d-infrastructure-map"><strong>2. Navigating the 3D Infrastructure Map</strong><a class="headerlink" href="#2-navigating-the-3d-infrastructure-map" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In the left navigation menu, click <strong>Infrastructure</strong>.</li>
+<li>The <strong>3D Infrastructure Map</strong> will render:</li>
+</ol>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab1_infrastructure_map.png" alt="Instana Infrastructure Map" />
+  <div class="screenshot-caption">Figure 1.1: Instana 3D Infrastructure Map displaying pillars (Hosts), stacked component boxes, and health state indicators.</div>
+</div>
+
+<hr />
+<h2 id="3-anatomy-of-a-pillar-in-the-3d-map"><strong>3. Anatomy of a Pillar in the 3D Map</strong><a class="headerlink" href="#3-anatomy-of-a-pillar-in-the-3d-map" title="Permanent link">&para;</a></h2>
+<p>Every visual element conveys immediate structural and health context:</p>
+<ul>
+<li><strong>Zones (Perimeter boundaries):</strong> Delimit physical or logical clusters (e.g., <em>Kubernetes Cluster mycluster-jp-tok</em>, <em>Production-AWS</em>, <em>On-Premises Fyre</em>).</li>
+<li><strong>Pillars (Vertical towers):</strong> Represents a monitored <strong>Host / Virtual Machine / Worker Node</strong> running an Instana agent.</li>
+<li><strong>Stacked Boxes:</strong> Each box inside a pillar represents an active <strong>component or running process</strong> (e.g., JVM process, Docker container, PostgreSQL database, Nginx web server).</li>
+<li><strong>Health Indicators:</strong><ul>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> <strong>Grey / White:</strong> Healthy (Normal operation without resource saturation).</li>
+<li><img alt="⚠" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/26a0.svg" title=":warning:" /> <strong>Yellow:</strong> Warning (e.g., elevated memory pressure or disk space depletion).</li>
+<li><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M2.343 13.657A8 8 0 1 1 13.658 2.343 8 8 0 0 1 2.343 13.657M6.03 4.97a.75.75 0 0 0-1.042.018.75.75 0 0 0-.018 1.042L6.94 8 4.97 9.97a.749.749 0 0 0 .326 1.275.75.75 0 0 0 .734-.215L8 9.06l1.97 1.97a.749.749 0 0 0 1.275-.326.75.75 0 0 0-.215-.734L9.06 8l1.97-1.97a.749.749 0 0 0-.326-1.275.75.75 0 0 0-.734.215L8 6.94Z"/></svg></span> <strong>Red:</strong> Critical error or active incident degrading business services.</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2 id="4-dynamic-perspectives-and-groupings-hosts-vs-containers"><strong>4. Dynamic Perspectives and Groupings (Hosts vs Containers)</strong><a class="headerlink" href="#4-dynamic-perspectives-and-groupings-hosts-vs-containers" title="Permanent link">&para;</a></h2>
+<p>In the bottom-right toolbar of the map, interactive controls allow restructuring the topology view:</p>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab1_container_map.png" alt="Map Perspective Controls" />
+  <div class="screenshot-caption">Figure 1.2: Perspective and dynamic grouping selector (by Zone, Container, Kubernetes Pod, or Technology).</div>
+</div>
+
+<h3 id="reorganization-exercise">Reorganization Exercise:<a class="headerlink" href="#reorganization-exercise" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Click the <strong>Perspective / Grouping</strong> button (cube icon or <code>...</code> in the bottom bar).</li>
+<li>Switch grouping to <strong>Container</strong>.</li>
+<li>Observe how the map reorganizes instantly: pillars now represent Kubernetes pods or namespaces (<code>robot-shop</code>, <code>monitoring</code>, <code>kube-system</code>), offering a clear cloud-native perspective.</li>
+</ol>
+<hr />
+<h2 id="5-in-depth-host-inspection-and-1-second-metrics"><strong>5. In-Depth Host Inspection and 1-Second Metrics</strong><a class="headerlink" href="#5-in-depth-host-inspection-and-1-second-metrics" title="Permanent link">&para;</a></h2>
+<ol>
+<li>At the top of the map, click <strong>Comparison table</strong> or click on any pillar to open the host sidebar and select <strong>Open Dashboard</strong>.</li>
+</ol>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab1_host_detail.png" alt="Detailed Host Dashboard" />
+  <div class="screenshot-caption">Figure 1.3: Detailed Host Dashboard displaying 1-second resolution metrics and active process lists.</div>
+</div>
+
+<ol>
+<li><strong>Real-Time System Telemetry (1-Second Granularity):</strong><ul>
+<li><strong>CPU Load &amp; Usage:</strong> Precise breakdown between <code>User</code>, <code>System</code>, <code>I/O Wait</code>, and <code>Steal CPU</code> (vital in multi-tenant cloud environments).</li>
+<li><strong>Memory Utilization:</strong> Breakdown between active resident memory, OS buffers, and page cache.</li>
+<li><strong>Network Traffic &amp; TCP Retransmissions:</strong> Network layer bottleneck detection and dropped packet tracking.</li>
+<li><strong>Disk Throughput &amp; Latency:</strong> Storage read/write throughput and IOPS latency.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="6-context-guide-and-stack-viewer-from-hardware-to-code"><strong>6. Context Guide and Stack Viewer (From Hardware to Code)</strong><a class="headerlink" href="#6-context-guide-and-stack-viewer-from-hardware-to-code" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In the upper-left corner of the Host Dashboard, click the <strong>Stack</strong> button:</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>┌────────────────────────────────────────────────────────┐
+</span><span id="__codelineno-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>│  Stack ▼                                               │
+</span><span id="__codelineno-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>├────────────────────────────────────────────────────────┤
+</span><span id="__codelineno-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│  ▲ Host: worker2.pivot-test.cp.fyre.ibm.com            │
+</span><span id="__codelineno-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│    └── Container: robot-shop-catalogue                 │
+</span><span id="__codelineno-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│          └── Process: node catalogue.js (PID: 1248)    │
+</span><span id="__codelineno-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│                └── Service: catalogue                  │
+</span><span id="__codelineno-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>│                      └── Endpoint: GET /products       │
+</span><span id="__codelineno-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>└────────────────────────────────────────────────────────┘
+</span></code></pre></div>
+<ol>
+<li>Click <strong>Stack</strong> to navigate up and down the Dynamic Graph:</li>
+<li>In a single click, you can jump directly from physical host CPU metrics to the logical <code>catalogue</code> microservice and its live traces.</li>
+</ol>
+<hr />
+<h2 id="7-runtime-and-jvm-forensic-diagnostics"><strong>7. Runtime and JVM Forensic Diagnostics</strong><a class="headerlink" href="#7-runtime-and-jvm-forensic-diagnostics" title="Permanent link">&para;</a></h2>
+<ol>
+<li>From the map or the Stack Viewer, select a <strong>Java Virtual Machine (JVM)</strong> or application server component (<strong>Open Liberty / Tomcat</strong>).</li>
+<li>Explore specialized runtime telemetry tabs:</li>
+</ol>
+<pre class="mermaid"><code>graph TD
+    JVM["JVM Diagnostics"]
+    JVM --&gt; MEM["Memory Pools (Eden, Survivor, Tenured, Metaspace)"]
+    JVM --&gt; GC["Garbage Collection Pauses (Stop-The-World duration)"]
+    JVM --&gt; TH["Thread Pools (Live, Daemon, Peak, Deadlocked Threads)"]
+    JVM --&gt; ENV["Environment (JVM Arguments, System Properties, Classpath)"]
+
+    style JVM fill:#dbeafe,stroke:#1d4976
+    style MEM fill:#f0fdf4,stroke:#15803d
+    style GC fill:#fef2f2,stroke:#b91c1c</code></pre>
+<h3 id="production-diagnostic-scenarios">Production Diagnostic Scenarios:<a class="headerlink" href="#production-diagnostic-scenarios" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Memory Leak Detection:</strong> Inspect the <em>Tenured (Old Gen)</em> memory graph. If post-GC baseline memory exhibits a continuous upward slope across successive collection cycles, a memory leak is occurring.</li>
+<li><strong>Stop-The-World GC Pauses:</strong> If total GC time exceeds 5% of overall CPU time or individual pause durations exceed 500 ms, end-users will experience intermittent latency spikes.</li>
+<li><strong>Thread Deadlocks:</strong> Instana automatically detects threads stuck in <em>BLOCKED</em> or <em>WAITING</em> states due to synchronized monitor contention.</li>
+</ul>
+<hr />
+<h2 id="8-advanced-agent-configuration-configurationyaml"><strong>8. Advanced Agent Configuration (<code>configuration.yaml</code>)</strong><a class="headerlink" href="#8-advanced-agent-configuration-configurationyaml" title="Permanent link">&para;</a></h2>
+<p>The Instana Host Agent is configured via a centralized YAML configuration file:</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__codelineno-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># /opt/instana/agent/etc/instana/configuration.yaml</span>
+</span><span id="__codelineno-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">com.instana.plugin.generic.hardware</span><span class="p">:</span>
+</span><span id="__codelineno-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__codelineno-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__codelineno-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Custom zone and host tags</span>
+</span><span id="__codelineno-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="nt">com.instana.plugin.host</span><span class="p">:</span>
+</span><span id="__codelineno-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">tags</span><span class="p">:</span>
+</span><span id="__codelineno-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+</span><span id="__codelineno-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">backend</span>
+</span><span id="__codelineno-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">datacenter</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">madrid-dc1</span>
+</span><span id="__codelineno-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+</span><span id="__codelineno-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Trace HTTP header capture</span>
+</span><span id="__codelineno-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nt">com.instana.plugin.javatrace</span><span class="p">:</span>
+</span><span id="__codelineno-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">  </span><span class="nt">custom-headers</span><span class="p">:</span>
+</span><span id="__codelineno-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'X-User-ID'</span>
+</span><span id="__codelineno-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">'X-Correlation-ID'</span>
+</span></code></pre></div>
+<hr />
+<h2 id="9-lab-1-summary-and-checklist"><strong>9. Lab 1 Summary and Checklist</strong><a class="headerlink" href="#9-lab-1-summary-and-checklist" title="Permanent link">&para;</a></h2>
+<p>Upon completing this lab, you have gained the skills to:</p>
+<ul>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Interpret the 3D infrastructure map and visual health indicators.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Switch dynamic map groupings and perspectives (Hosts, Containers, and Namespaces).</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Analyze 1-second infrastructure telemetry to catch transient micro-bursts.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Navigate the <em>Dynamic Graph</em> hierarchy from hardware to code using the <em>Stack Viewer</em>.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Diagnose JVM runtimes (Heap pools, Garbage Collection pauses, and thread states).</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Understand agent configuration settings in <code>configuration.yaml</code>.</li>
+</ul>
+<hr />
+<p><a class="md-button md-button--primary" href="../lab2/">Continue to Lab 2: Application Perspectives &amp; Service Flow <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

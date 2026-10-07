@@ -1,0 +1,1040 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop interactivo y práctico para la monitorización de aplicaciones empresariales y análisis de causa raíz con IBM Instana">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+        <link rel="canonical" href="https://ibm-automation-spgi.github.io/instana-workshop/lab3/">
+      
+      
+        <link rel="prev" href="../lab2/">
+      
+      
+        <link rel="next" href="../lab4/">
+      
+      
+        
+          <link rel="alternate" href="./" hreflang="es">
+        
+          <link rel="alternate" href="../en/lab3/" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 3 — 100% Tracing No-Sampling & Analytics - Workshop de Observabilidad con IBM Instana</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../styles/custom.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-3-100-tracing-no-sampling-analytics" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href=".." title="Workshop de Observabilidad con IBM Instana" class="md-header__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Workshop de Observabilidad con IBM Instana
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 3 — 100% Tracing No-Sampling & Analytics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Seleccionar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="../en/lab3/" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Workshop de Observabilidad con IBM Instana" class="md-nav__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Workshop de Observabilidad con IBM Instana
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Ir al repositorio" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introducción y Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 — Entorno, Consola y Dynamic Focus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 — Infrastructure 3D, 1s Metrics & JVMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 — Application Perspectives & Service Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 — 100% Tracing No-Sampling & Analytics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 — 100% Tracing No-Sampling & Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fundamentos-del-tracing-distribuido-en-instana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fundamentos del Tracing Distribuido en Instana
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Fundamentos del Tracing Distribuido en Instana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-diferencial-clave-de-instana-100-no-sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El Diferencial Clave de Instana: 100% No-Sampling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-acceso-a-unbounded-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Acceso a Unbounded Analytics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-consultas-y-filtrado-avanzado-por-etiquetas-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Consultas y Filtrado Avanzado por Etiquetas (Tags)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Consultas y Filtrado Avanzado por Etiquetas (Tags)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicios-practicos-de-analitica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios Prácticos de Analítica:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-anatomia-de-una-traza-en-vista-cascada-waterfall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Anatomía de una Traza en Vista Cascada (Waterfall)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Anatomía de una Traza en Vista Cascada (Waterfall)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elementos-de-diagnostico-en-la-traza" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elementos de Diagnóstico en la Traza:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-resumen-y-checklist-del-lab-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Resumen y Checklist del Lab 3
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab4/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 — Incidentes, RCA & Change Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 — SmartAlerts, SLOs & Custom Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 — Kubernetes & OpenShift Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 7 — OpenTelemetry, SDK & Action Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-fundamentos-del-tracing-distribuido-en-instana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Fundamentos del Tracing Distribuido en Instana
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Fundamentos del Tracing Distribuido en Instana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#el-diferencial-clave-de-instana-100-no-sampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        El Diferencial Clave de Instana: 100% No-Sampling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-acceso-a-unbounded-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Acceso a Unbounded Analytics
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-consultas-y-filtrado-avanzado-por-etiquetas-tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Consultas y Filtrado Avanzado por Etiquetas (Tags)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Consultas y Filtrado Avanzado por Etiquetas (Tags)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ejercicios-practicos-de-analitica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ejercicios Prácticos de Analítica:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-anatomia-de-una-traza-en-vista-cascada-waterfall" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Anatomía de una Traza en Vista Cascada (Waterfall)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Anatomía de una Traza en Vista Cascada (Waterfall)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elementos-de-diagnostico-en-la-traza" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elementos de Diagnóstico en la Traza:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-resumen-y-checklist-del-lab-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Resumen y Checklist del Lab 3
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lab-3-100-tracing-no-sampling-analytics"><strong>Lab 3 — 100% Tracing No-Sampling &amp; Analytics</strong><a class="headerlink" href="#lab-3-100-tracing-no-sampling-analytics" title="Permanent link">&para;</a></h1>
+<p><span class="lab-badge">LAB 3</span><span class="lab-time">⏱ 20 minutos</span></p>
+<hr />
+<h2 id="1-fundamentos-del-tracing-distribuido-en-instana"><strong>1. Fundamentos del Tracing Distribuido en Instana</strong><a class="headerlink" href="#1-fundamentos-del-tracing-distribuido-en-instana" title="Permanent link">&para;</a></h2>
+<p>El <strong>Distributed Tracing</strong> es el mecanismo que permite reconstruir el viaje completo de una petición a través de múltiples microservicios, capas de red, colas asíncronas y bases de datos.</p>
+<h3 id="el-diferencial-clave-de-instana-100-no-sampling">El Diferencial Clave de Instana: <strong>100% No-Sampling</strong><a class="headerlink" href="#el-diferencial-clave-de-instana-100-no-sampling" title="Permanent link">&para;</a></h3>
+<p>La inmensa mayoría de herramientas APM utilizan <em>Head-based</em> o <em>Tail-based Sampling</em>, descartando hasta el 99% de las trazas para ahorrar almacenamiento. <strong>Instana rastrea y procesa el 100% de las llamadas</strong>.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Comparativa</th>
+<th style="text-align: left;">Herramientas APM Tradicionales</th>
+<th style="text-align: left;">IBM Instana</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Tasa de Muestreo (Sampling)</strong></td>
+<td style="text-align: left;">1% a 5% (Muestreo probabilístico)</td>
+<td style="text-align: left;"><strong>100% Completo (No-Sampling)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Detección de errores esporádicos</strong></td>
+<td style="text-align: left;">Muy baja (1 error entre 1.000 se pierde)</td>
+<td style="text-align: left;"><strong>100% garantizado (Cero puntos ciegos)</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Auditoría por ID de Cliente</strong></td>
+<td style="text-align: left;">Inviable si la traza no fue muestreada</td>
+<td style="text-align: left;"><strong>Búsqueda inmediata por cualquier Tag/Payload</strong></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Exactitud en Percentiles (P99)</strong></td>
+<td style="text-align: left;">Aproximada por extrapolación</td>
+<td style="text-align: left;"><strong>Matemáticamente exacta</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-acceso-a-unbounded-analytics"><strong>2. Acceso a Unbounded Analytics</strong><a class="headerlink" href="#2-acceso-a-unbounded-analytics" title="Permanent link">&para;</a></h2>
+<ol>
+<li>En el menú lateral izquierdo, haz clic en <strong>Analytics</strong>.</li>
+<li>Selecciona la perspectiva <strong>Applications / Calls</strong> o <strong>Traces</strong>:</li>
+</ol>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab3_analytics_traces.png" alt="Unbounded Analytics en Instana" />
+  <div class="screenshot-caption">Figura 3.1: Interfaz de Unbounded Analytics procesando más de 1.750.000 llamadas con gráficos de Throughput (Calls sum), Erroneous calls rate y Latency mean.</div>
+</div>
+
+<ol>
+<li>
+<p>Observa los tres paneles superiores sincronizados en tiempo real:</p>
+<ul>
+<li><strong>Calls (sum):</strong> Gráfico de barras con el volumen total de peticiones procesadas.</li>
+<li><strong>Erroneous calls rate (mean):</strong> Gráfico de barras rojas que resalta anomalías de errores.</li>
+<li><strong>Latency (mean / P95):</strong> Distribución de latencias a lo largo de la ventana temporal.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="3-consultas-y-filtrado-avanzado-por-etiquetas-tags"><strong>3. Consultas y Filtrado Avanzado por Etiquetas (Tags)</strong><a class="headerlink" href="#3-consultas-y-filtrado-avanzado-por-etiquetas-tags" title="Permanent link">&para;</a></h2>
+<p>En <strong>Unbounded Analytics</strong>, puedes combinar cualquier dimensión de infraestructura, aplicación o payload HTTP mediante filtros dinámicos:</p>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab3_trace_waterfall.png" alt="Detalle de Traza en Cascada" />
+  <div class="screenshot-caption">Figura 3.2: Vista en cascada (Waterfall) de una transacción distribuida con sub-llamadas SQL, HTTP y correlación de infraestructura.</div>
+</div>
+
+<h3 id="ejercicios-practicos-de-analitica">Ejercicios Prácticos de Analítica:<a class="headerlink" href="#ejercicios-practicos-de-analitica" title="Permanent link">&para;</a></h3>
+<div class="admonition example">
+<p class="admonition-title">Ejercicio 1: Filtrar todas las llamadas a bases de datos con latencia &gt; 20ms</p>
+<ol>
+<li>Haz clic en <strong>Add filter +</strong>.</li>
+<li>
+<p>Configura los parámetros:</p>
+</li>
+<li>
+<p><code>call.type</code> = <code>database</code></p>
+</li>
+<li><code>call.duration</code> &gt; <code>20ms</code></li>
+<li>Observa cómo Instana aísla únicamente las consultas lentas a MySQL, PostgreSQL y MongoDB.</li>
+</ol>
+</div>
+<div class="admonition example">
+<p class="admonition-title">Ejercicio 2: Agrupar fallos por Servicio y Endpoint</p>
+<ol>
+<li>En la barra superior, haz clic en <strong>Add group +</strong> y selecciona <code>service.name</code>.</li>
+<li>Añade un segundo nivel de agrupación con <code>endpoint.name</code>.</li>
+<li>Añade el filtro <code>call.erroneous = true</code>.</li>
+<li><em>Resultado:</em> Obtendrás un ranking exacto de qué endpoints generan el mayor impacto negativo en tus usuarios.</li>
+</ol>
+</div>
+<hr />
+<h2 id="4-anatomia-de-una-traza-en-vista-cascada-waterfall"><strong>4. Anatomía de una Traza en Vista Cascada (Waterfall)</strong><a class="headerlink" href="#4-anatomia-de-una-traza-en-vista-cascada-waterfall" title="Permanent link">&para;</a></h2>
+<p>Haz clic sobre cualquiera de las transacciones en la tabla para abrir el visor de traza:</p>
+<pre class="mermaid"><code>gantt
+    title Desglose de Spans en Transacción /cart/checkout (Total: 145ms)
+    dateFormat X
+    axisFormat %s ms
+
+    section Web Gateway
+    HTTP Entry GET /cart/checkout : 0, 145
+
+    section Cart Service
+    Node.js Intermediate processOrder : 10, 140
+    Redis GET user_session : 15, 30
+
+    section Payment Service
+    HTTP Exit POST /payment/charge : 35, 120
+    MySQL UPDATE balance : 50, 85
+    PayPal External API : 85, 115
+
+    section Notification
+    RabbitMQ Message Publish : 125, 140</code></pre>
+<h3 id="elementos-de-diagnostico-en-la-traza">Elementos de Diagnóstico en la Traza:<a class="headerlink" href="#elementos-de-diagnostico-en-la-traza" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Spans y Tipos de Llamada:</strong></li>
+<li><strong>Entry Span (Azul):</strong> Entrada de la petición al microservicio (punto de inicio).</li>
+<li><strong>Intermediate Span (Gris):</strong> Procesamiento interno en el runtime o ejecución de método anotado.</li>
+<li><strong>Exit Span (Naranja/Rojo):</strong> Llamada saliente a una base de datos, API externa o cola de mensajes.</li>
+<li><strong>SQL &amp; Query Payloads:</strong></li>
+<li>Haz clic sobre un span de base de datos (<code>MySQL</code> o <code>MongoDB</code>).</li>
+<li>En el panel derecho verás la sentencia SQL completa sanitizada (<code>UPDATE users SET last_login = ...</code>), la base de datos de destino y el tiempo exacto que tardó el motor de BD en responder.</li>
+<li><strong>Mensajería Asíncrona (Kafka &amp; RabbitMQ):</strong></li>
+<li>Instana propaga el contexto de tracing a través de las cabeceras de los mensajes de Kafka y RabbitMQ, permitiendo rastrear el flujo asíncrono desde el productor hasta el consumidor.</li>
+<li><strong>Excepciones y Stack Traces:</strong></li>
+<li>Si un span falla (marcado con barra roja), haz clic sobre él para desplegar el <em>Stack Trace</em> completo del lenguaje (Java, Node.js, Python), con el nombre del fichero y el número de línea exacto donde ocurrió el error.</li>
+</ol>
+<hr />
+<h2 id="5-resumen-y-checklist-del-lab-3"><strong>5. Resumen y Checklist del Lab 3</strong><a class="headerlink" href="#5-resumen-y-checklist-del-lab-3" title="Permanent link">&para;</a></h2>
+<p>Al finalizar este laboratorio, has adquirido las competencias para:</p>
+<ul>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Comprender el valor del tracing distribuido al 100% sin muestreo (<em>No-Sampling</em>).</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Utilizar <em>Unbounded Analytics</em> para construir consultas analíticas sobre millones de registros.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Segmentar y agrupar transacciones por múltiples etiquetas de alta cardinalidad.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Diagnosticar cuellos de botella en la vista <em>Waterfall</em>, analizando sentencias SQL, llamadas HTTP externas, colas Kafka/RabbitMQ y excepciones de código.</li>
+</ul>
+<hr />
+<p><a class="md-button md-button--primary" href="../lab4/">Continuar al Lab 4: Incidentes, RCA &amp; Change Events <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

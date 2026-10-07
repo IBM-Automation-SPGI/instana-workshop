@@ -1,0 +1,1051 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Workshop interactivo y práctico para la monitorización de aplicaciones empresariales y análisis de causa raíz con IBM Instana">
+      
+      
+        <meta name="author" content="IBM Client Engineering">
+      
+      
+        <link rel="canonical" href="https://ibm-automation-spgi.github.io/instana-workshop/en/lab4/">
+      
+      
+        <link rel="prev" href="../lab3/">
+      
+      
+        <link rel="next" href="../lab5/">
+      
+      
+        
+          <link rel="alternate" href="../../lab4/" hreflang="es">
+        
+          <link rel="alternate" href="./" hreflang="en">
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Lab 4 — Incidents, RCA & Change Events - Workshop de Observabilidad con IBM Instana</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:300,300i,400,400i,700,700i%7CIBM+Plex+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"IBM Plex Sans";--md-code-font:"IBM Plex Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../styles/custom.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#lab-4-events-incidents-and-root-cause-analysis-rca" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../" title="Workshop de Observabilidad con IBM Instana" class="md-header__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Workshop de Observabilidad con IBM Instana
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Lab 4 — Incidents, RCA & Change Events
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="blue"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../lab4/" hreflang="es" class="md-select__link">
+              Español
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="Workshop de Observabilidad con IBM Instana" class="md-nav__button md-logo" aria-label="Workshop de Observabilidad con IBM Instana" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Workshop de Observabilidad con IBM Instana
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/IBM-Automation-SPGI/instana-workshop" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    IBM-Automation-SPGI/instana-workshop
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction & Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab0/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 0 — Environment, Console & Dynamic Focus
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab1/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 1 — 3D Infrastructure, 1s Metrics & JVMs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 2 — Application Perspectives & Service Flow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 3 — 100% Tracing No-Sampling & Analytics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 — Incidents, RCA & Change Events
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 4 — Incidents, RCA & Change Events
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-problem-of-alert-fatigue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Problem of Alert Fatigue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-instanas-ai-correlation-and-incident-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Instana's AI Correlation and Incident Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Instana&#39;s AI Correlation and Incident Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#event-classification-in-instana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Event Classification in Instana:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-navigating-the-events-incidents-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Navigating the Events &amp; Incidents Center
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-incident-investigation-and-the-root-cause-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Incident Investigation and the Root Cause Tree
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-correlating-change-events-with-incidents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Correlating Change Events with Incidents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Correlating Change Events with Incidents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-release-marker-registration-via-rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programmatic Release Marker Registration via REST API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-guided-hands-on-exercise-real-incident-triage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Guided Hands-on Exercise: Real Incident Triage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-lab-4-summary-and-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Lab 4 Summary and Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab5/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 5 — SmartAlerts, SLOs & Custom Dashboards
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab6/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 6 — Kubernetes & OpenShift Observability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lab7/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lab 7 — OpenTelemetry, SDK & Action Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-the-problem-of-alert-fatigue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. The Problem of Alert Fatigue
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-instanas-ai-correlation-and-incident-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Instana's AI Correlation and Incident Engine
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Instana&#39;s AI Correlation and Incident Engine">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#event-classification-in-instana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Event Classification in Instana:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-navigating-the-events-incidents-center" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Navigating the Events &amp; Incidents Center
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-incident-investigation-and-the-root-cause-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Incident Investigation and the Root Cause Tree
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-correlating-change-events-with-incidents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Correlating Change Events with Incidents
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Correlating Change Events with Incidents">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#programmatic-release-marker-registration-via-rest-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Programmatic Release Marker Registration via REST API
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-guided-hands-on-exercise-real-incident-triage" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Guided Hands-on Exercise: Real Incident Triage
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-lab-4-summary-and-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Lab 4 Summary and Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="lab-4-events-incidents-and-root-cause-analysis-rca"><strong>Lab 4 — Events, Incidents, and Root Cause Analysis (RCA)</strong><a class="headerlink" href="#lab-4-events-incidents-and-root-cause-analysis-rca" title="Permanent link">&para;</a></h1>
+<p><span class="lab-badge">LAB 4</span><span class="lab-time">⏱ 15 minutes</span></p>
+<hr />
+<h2 id="1-the-problem-of-alert-fatigue"><strong>1. The Problem of Alert Fatigue</strong><a class="headerlink" href="#1-the-problem-of-alert-fatigue" title="Permanent link">&para;</a></h2>
+<p>In traditional architectures running dozens of microservices across Kubernetes clusters, an outage in a database or top-of-rack network switch triggers an "alert storm":</p>
+<ul>
+<li>The database generates connection pool exhaustion alerts.</li>
+<li>15 dependent microservices fire timeout and HTTP 500 alerts.</li>
+<li>The API Gateway fires P99 latency alerts.</li>
+<li>Kubernetes triggers readiness probe failure and CrashLoopBackOff alerts.</li>
+</ul>
+<p><strong>Result:</strong> The on-call SRE team receives over 80 simultaneous notifications in Slack or PagerDuty, spending hours determining which alert represents the actual root cause.</p>
+<hr />
+<h2 id="2-instanas-ai-correlation-and-incident-engine"><strong>2. Instana's AI Correlation and Incident Engine</strong><a class="headerlink" href="#2-instanas-ai-correlation-and-incident-engine" title="Permanent link">&para;</a></h2>
+<p>Instana eliminates alert fatigue through its <strong>AI-powered Dynamic Graph correlation engine</strong>:</p>
+<pre class="mermaid"><code>flowchart TD
+    subgraph SINTOMAS["Observed Symptoms (Alert Storm Suppressed)"]
+        A["Alert 1: HTTP Latency &gt; 2s at Gateway"]
+        B["Alert 2: Error Rate &gt; 20% on /checkout"]
+        C["Alert 3: Cart Pods in CrashLoop"]
+    end
+
+    subgraph MOTOR["Instana Correlation Engine (Dynamic Graph)"]
+        ML["AI &amp; Graph Reasoning"]
+    end
+
+    subgraph CAUSA["Actual Identified Root Cause"]
+        ROOT["💥 ROOT CAUSE: PostgreSQL DB - Disk Space Exhausted (100% full)"]
+    end
+
+    SINTOMAS --&gt; ML
+    ML --&gt;|Groups and synthesizes into| INCIDENTE["🔔 SINGLE ACTIONABLE INCIDENT"]
+    INCIDENTE --&gt; ROOT
+
+    style SINTOMAS fill:#fff1f2,stroke:#f43f5e
+    style MOTOR fill:#f0fdf4,stroke:#16a34a
+    style CAUSA fill:#fee2e2,stroke:#ef4444
+    style INCIDENTE fill:#fef3c7,stroke:#d97706</code></pre>
+<h3 id="event-classification-in-instana">Event Classification in Instana:<a class="headerlink" href="#event-classification-in-instana" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Changes:</strong> State modifications across the environment (e.g., Git code deploy, environment variable change, Kubernetes pod replica scaling).</li>
+<li><strong>Issues:</strong> Isolated infrastructure anomalies that do not yet impact end-user transactions (e.g., CPU at 85% on a secondary worker node).</li>
+<li><strong>Incidents:</strong> Contextual grouping of multiple Issues and Changes where <strong>a critical service or business KPI is degraded</strong>.</li>
+</ul>
+<hr />
+<h2 id="3-navigating-the-events-incidents-center"><strong>3. Navigating the Events &amp; Incidents Center</strong><a class="headerlink" href="#3-navigating-the-events-incidents-center" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In the left navigation menu, click <strong>Events</strong> (or <strong>Events &amp; Incidents</strong>).</li>
+<li>The global anomaly timeline and active incident table will render:</li>
+</ol>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab4_events_incidents.png" alt="Instana Events and Incidents Center" />
+  <div class="screenshot-caption">Figure 4.1: Events and Incidents Center in Instana showing the global activity timeline and table with Active / Closed states.</div>
+</div>
+
+<ol>
+<li>
+<p>Review the informative table columns:</p>
+<ul>
+<li><strong>Event / Title:</strong> Summary description (e.g., <em>Service call rate is greater than normal usage</em>, <em>Etcd fsync duration</em>, <em>IBM i DBMC status</em>).</li>
+<li><strong>On (Entity):</strong> Exact impacted host, container, or component (e.g., <code>mycluster-jp-tok-2-bx2.2x8-robot-shop-catalogue</code>, <code>worker2.pivot-test...</code>).</li>
+<li><strong>Started / End:</strong> Timestamp of detection and resolution.</li>
+<li><strong>Timeline / State:</strong> Visual duration bar and lifecycle state (<code>Active</code> or <code>Closed by Instana</code>).</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2 id="4-incident-investigation-and-the-root-cause-tree"><strong>4. Incident Investigation and the Root Cause Tree</strong><a class="headerlink" href="#4-incident-investigation-and-the-root-cause-tree" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Click on any active incident row to open its detailed triage view:</li>
+</ol>
+<div class="screenshot-container">
+  <img src="../assets/screenshots/lab4_incident_detail.png" alt="Incident Detail and Root Cause Tree" />
+  <div class="screenshot-caption">Figure 4.2: Incident detail view displaying impacted entity and correlated telemetry timeline.</div>
+</div>
+
+<ol>
+<li><strong>Root Cause Tree Diagnostics:</strong>
+   Instana traverses the dependency graph from outward symptoms down to the root cause component:</li>
+</ol>
+<div class="language-text highlight"><pre><span></span><code><span id="__codelineno-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>🔴 INCIDENT: Keda-Scaler-RobotApp — Service Call Rate Anomaly on /catalogue
+</span><span id="__codelineno-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>   │
+</span><span id="__codelineno-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   ├── ⚠️ Frontend Symptom: nginx-web (HTTP 502 Bad Gateway error rate)
+</span><span id="__codelineno-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>   │     │
+</span><span id="__codelineno-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>   │     └── ⚠️ Intermediate Service: catalogue (Node.js API timeouts)
+</span><span id="__codelineno-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>   │           │
+</span><span id="__codelineno-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>   │           └── 💥 ROOT CAUSE: MongoDB - Connection Pool Exhausted 
+</span><span id="__codelineno-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>   │                 (Host: worker2.pivot-test... / RAM: 98% saturation)
+</span></code></pre></div>
+<hr />
+<h2 id="5-correlating-change-events-with-incidents"><strong>5. Correlating Change Events with Incidents</strong><a class="headerlink" href="#5-correlating-change-events-with-incidents" title="Permanent link">&para;</a></h2>
+<p>A critical superpower of Instana is temporal correlation with change events:</p>
+<ol>
+<li>Along the incident timeline, observe deployment markers and change event flags.</li>
+<li>Clicking a change marker reveals:</li>
+<li><em>Deploy Event:</em> Container image deployment <code>robot-shop-catalogue:v2.1.0</code>.</li>
+<li><em>Author &amp; Commit:</em> GitHub commit author, hash, and pull request summary.</li>
+<li>This empowers SREs to answer questions in seconds:</li>
+</ol>
+<blockquote>
+<p>💡 <em>"The database connection failures began exactly 45 seconds after deploying commit abc1234"</em></p>
+</blockquote>
+<h3 id="programmatic-release-marker-registration-via-rest-api">Programmatic Release Marker Registration via REST API<a class="headerlink" href="#programmatic-release-marker-registration-via-rest-api" title="Permanent link">&para;</a></h3>
+<p>Inject deployment markers directly from your CI/CD pipeline (GitHub Actions, GitLab CI, Tekton, Jenkins) by sending an HTTP POST request to the Instana API:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__codelineno-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span><span class="se">\</span>
+</span><span id="__codelineno-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>https://ibmdevsandbox-instanaibm.instana.io/api/releases<span class="w"> </span><span class="se">\</span>
+</span><span id="__codelineno-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Authorization: apiToken </span><span class="si">${</span><span class="nv">INSTANA_API_TOKEN</span><span class="si">}</span><span class="s2">"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__codelineno-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">"Content-Type: application/json"</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__codelineno-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">'{</span>
+</span><span id="__codelineno-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="s1">    "name": "Release v2.1.0 - Robot Shop Catalogue",</span>
+</span><span id="__codelineno-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="s1">    "start": '</span><span class="k">$(</span>date<span class="w"> </span>+%s000<span class="k">)</span><span class="s1">',</span>
+</span><span id="__codelineno-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="s1">    "services": [</span>
+</span><span id="__codelineno-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="s1">      {</span>
+</span><span id="__codelineno-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="s1">        "name": "catalogue"</span>
+</span><span id="__codelineno-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="s1">      }</span>
+</span><span id="__codelineno-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="s1">    ]</span>
+</span><span id="__codelineno-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="s1">  }'</span>
+</span></code></pre></div>
+<hr />
+<h2 id="6-guided-hands-on-exercise-real-incident-triage"><strong>6. Guided Hands-on Exercise: Real Incident Triage</strong><a class="headerlink" href="#6-guided-hands-on-exercise-real-incident-triage" title="Permanent link">&para;</a></h2>
+<p>Perform the following step-by-step investigation in the Instana console:</p>
+<ol>
+<li><strong>Filter Incidents:</strong> In the <strong>Events</strong> menu, toggle both <code>Closed</code> and <code>Active</code> states.</li>
+<li><strong>Search Events:</strong> In the query box, search for <code>catalogue</code> or <code>Service call rate is greater than normal usage</code>.</li>
+<li><strong>Assess Severity:</strong> Identify the icon severity (Yellow for <em>Warning / Issue</em>, Red for <em>Critical / Incident</em>).</li>
+<li><strong>Navigate to the Entity:</strong> Click the associated entity link to open the host/container infrastructure view at the exact timestamp when degradation occurred.</li>
+<li><strong>Inspect Correlated Metrics:</strong> Observe how CPU, memory, and call rate charts automatically lock onto the incident's timeframe.</li>
+</ol>
+<hr />
+<h2 id="7-lab-4-summary-and-checklist"><strong>7. Lab 4 Summary and Checklist</strong><a class="headerlink" href="#7-lab-4-summary-and-checklist" title="Permanent link">&para;</a></h2>
+<p>Upon completing this lab, you have gained the skills to:</p>
+<ul>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Understand the distinction between <em>Changes</em>, <em>Issues</em>, and <em>Incidents</em>.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Navigate the events center and chronological activity timeline.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Interpret the <em>Root Cause Analysis (RCA)</em> tree to diagnose outages in minutes.</li>
+<li><img alt="✅" class="twemoji" src="https://cdn.jsdelivr.net/gh/jdecked/twemoji@16.0.1/assets/svg/2705.svg" title=":white_check_mark:" /> Correlate incidents with software deployments (<em>Change Events</em>).</li>
+</ul>
+<hr />
+<p><a class="md-button md-button--primary" href="../lab5/">Continue to Lab 5: SmartAlerts, SLOs &amp; Custom Dashboards <span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span></a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tracking", "navigation.sections", "navigation.expand", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
