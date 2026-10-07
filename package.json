@@ -1,0 +1,14 @@
+{
+  "name": "instana-workshop",
+  "version": "1.0.0",
+  "description": "Workshop de Observabilidad con IBM Instana",
+  "scripts": {
+    "start": "mkdocs serve",
+    "build": "mkdocs build",
+    "screenshots": "python3 generate_screenshots.py",
+    "screenshots:headless": "python3 generate_screenshots.py --headless"
+  },
+  "keywords": ["instana", "observability", "apm", "workshop", "ibm"],
+  "author": "IBM Client Engineering",
+  "license": "Apache-2.0"
+}

@@ -1,0 +1,129 @@
+/* Colores y estilos corporativos IBM Plex & Instana UI */
+:root {
+  --md-primary-fg-color: #0f62fe; /* IBM Blue */
+  --md-primary-fg-color--light: #4589ff;
+  --md-primary-fg-color--dark: #0043ce;
+  --md-accent-fg-color: #0f62fe;
+}
+
+[data-md-color-scheme="slate"] {
+  --md-primary-fg-color: #0f62fe;
+  --md-accent-fg-color: #78a9ff;
+}
+
+/* Tipografía IBM Plex */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap');
+
+body, input {
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+}
+
+code, kbd, pre {
+  font-family: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Badges e insignias de Labs */
+.lab-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 4px;
+  background-color: #0f62fe;
+  color: #ffffff;
+  margin-right: 0.5rem;
+}
+
+.lab-time {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 4px;
+  background-color: #e0e0e0;
+  color: #161616;
+}
+
+[data-md-color-scheme="slate"] .lab-time {
+  background-color: #262626;
+  color: #f4f4f4;
+}
+
+/* Estilo para imágenes de capturas */
+.screenshot-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin: 1.5rem 0;
+}
+
+[data-md-color-scheme="slate"] .screenshot-container {
+  border-color: #393939;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.screenshot-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.screenshot-caption {
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  color: #525252;
+  background-color: #f4f4f4;
+  border-top: 1px solid #e0e0e0;
+  font-style: italic;
+}
+
+[data-md-color-scheme="slate"] .screenshot-caption {
+  color: #a8a8a8;
+  background-color: #1f1f1f;
+  border-color: #393939;
+}
+
+/* Mejoras de contraste y legibilidad para diagramas Mermaid */
+.mermaid {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.mermaid .node rect,
+.mermaid .node circle,
+.mermaid .node polygon {
+  stroke-width: 1.5px !important;
+}
+
+.mermaid .node .label {
+  color: #161616 !important;
+  font-weight: 500;
+  font-family: 'IBM Plex Sans', sans-serif !important;
+}
+
+[data-md-color-scheme="slate"] .mermaid .node .label {
+  color: #f4f4f4 !important;
+}
+
+/* Tarjetas de diferenciadores con borde y fondo enriquecidos */
+.grid.cards > ul > li {
+  border: 1px solid #d0d7de !important;
+  border-radius: 8px !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.grid.cards > ul > li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 98, 254, 0.12) !important;
+  border-color: #0f62fe !important;
+}
+
+[data-md-color-scheme="slate"] .grid.cards > ul > li {
+  border-color: #393939 !important;
+}
+
+[data-md-color-scheme="slate"] .grid.cards > ul > li:hover {
+  box-shadow: 0 6px 16px rgba(15, 98, 254, 0.3) !important;
+  border-color: #4589ff !important;
+}

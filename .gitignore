@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.py
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+site/
+qa_audit_artifacts/
+audit_renders/
+audit_renders_full/
+*.png
+!docs/assets/screenshots/*.png
